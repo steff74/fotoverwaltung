@@ -8,7 +8,11 @@ Einfache Foto-Upload und -Verwaltung, Mobile-First Webanwendung ohne Datenbank.
 - Kategorien-Verwaltung
 - User-Verwaltung (Admin/User-Rollen)
 - EXIF-Daten: Sortierung nach Aufnahmedatum
-- Lightbox-Ansicht
+- Lightbox-Ansicht mit:
+  - Lade-Animation (Spinner)
+  - Vor/Zurück-Navigation (Loop)
+  - Tastatur-Navigation (← →, Escape)
+  - Inline-Bearbeitung von Beschreibungen
 - Responsive Design (Mobile-First)
 
 ## Technologie
