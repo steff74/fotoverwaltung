@@ -174,14 +174,11 @@ body {
 }
 
 .lightbox-header {
-    display: flex;
-    justify-content: space-between;
     width: 100%;
     color: #fff;
     font-size: 0.9rem;
     margin: 0 0 0.5rem 0;
     opacity: 0.8;
-    gap: 1rem;
 }
 
 .lightbox-description {
@@ -204,8 +201,17 @@ body {
 
 .lightbox-uploader {
     text-align: right;
-    flex-shrink: 0;
+    width: 100%;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.4);
+    margin-top: -1.0rem;
+
+    span {
+        background: rgba(0, 0, 0, 0.35);
+        padding: 0 0.25rem;
+    }
 }
+
 
 .lightbox-edit {
     display: flex;

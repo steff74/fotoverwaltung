@@ -75,8 +75,6 @@
                         <button class="lightbox-edit-btn" @click="saveDescription()">&#10003;</button>
                         <button class="lightbox-edit-btn" @click="cancelEditDescription()">&#10005;</button>
                     </div>
-
-                    <span class="lightbox-uploader" x-text="lightboxUploader"></span>
                 </div>
 
                 <!-- Spinner -->
@@ -86,6 +84,8 @@
 
                 <!-- Bild -->
                 <img :src="lightboxSrc" alt="Foto" x-show="!imageLoading" @load="onImageLoad()">
+
+                <span class="lightbox-uploader" x-show="!imageLoading && lightboxUploader"><span x-text="lightboxUploader"></span></span>
 
                 <div class="lightbox-actions" x-show="!imageLoading">
                     <a :href="lightboxSrc" target="_blank" class="lightbox-btn">Vergrößern</a>

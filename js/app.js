@@ -202,9 +202,7 @@ function photoGallery(photos = [], categorySlug = '', canEdit = false) {
             });
 
             if (result.success) {
-                this.lightboxDescription = this.tempDescription;
-                photo.description = this.tempDescription;
-                this.editingDescription = false;
+                location.reload();
             } else {
                 alert(result.error || 'Fehler beim Speichern');
             }
