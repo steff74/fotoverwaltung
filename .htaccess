@@ -1,0 +1,10 @@
+# URL-Rewriting für saubere URLs
+
+RewriteEngine On
+
+# Wenn die Datei oder das Verzeichnis existiert, direkt ausliefern
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Alles andere an index.php weiterleiten
+RewriteRule ^(.*)$ index.php [QSA,L]

@@ -1,0 +1,24 @@
+# Claude Code
+/.claude/
+
+# Konfiguration (enthält Passwörter)
+/config/config.php
+
+# Daten (User, Kategorien) - Ordner behalten, Inhalt ignorieren
+/data/*
+!/data/.gitkeep
+
+# Uploads (Bilder) - Ordnerstruktur behalten, Inhalt ignorieren
+/uploads/originals/*
+!/uploads/originals/.gitkeep
+/uploads/thumbs/*
+!/uploads/thumbs/.gitkeep
+
+# IDE
+.idea/
+*.swp
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
