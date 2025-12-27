@@ -122,24 +122,92 @@ function uploadForm() {
 }
 
 // Foto-Galerie mit Lightbox und Löschen
-function photoGallery() {
+function photoGallery(photos = [], categorySlug = '', canEdit = false) {
     return {
+        photos: photos,
+        categorySlug: categorySlug,
+        canEdit: canEdit,
+        currentIndex: 0,
         lightboxOpen: false,
         lightboxSrc: '',
         lightboxUploader: '',
+        lightboxDescription: '',
+        imageLoading: true,
+        editingDescription: false,
+        tempDescription: '',
 
-        openLightbox(src, uploader) {
-            this.lightboxSrc = src;
-            this.lightboxUploader = uploader || '';
+        openLightbox(index) {
+            this.currentIndex = index;
+            this.showPhoto();
             this.lightboxOpen = true;
             document.body.style.overflow = 'hidden';
+        },
+
+        showPhoto() {
+            this.imageLoading = true;
+            const photo = this.photos[this.currentIndex];
+            if (photo) {
+                this.lightboxSrc = photo.src;
+                this.lightboxUploader = photo.uploader || '';
+                this.lightboxDescription = photo.description || '';
+            }
+        },
+
+        nextPhoto() {
+            this.currentIndex = (this.currentIndex + 1) % this.photos.length;
+            this.showPhoto();
+        },
+
+        prevPhoto() {
+            this.currentIndex = (this.currentIndex - 1 + this.photos.length) % this.photos.length;
+            this.showPhoto();
+        },
+
+        onImageLoad() {
+            this.imageLoading = false;
         },
 
         closeLightbox() {
             this.lightboxOpen = false;
             this.lightboxSrc = '';
             this.lightboxUploader = '';
+            this.lightboxDescription = '';
+            this.imageLoading = true;
+            this.editingDescription = false;
             document.body.style.overflow = '';
+        },
+
+        startEditDescription() {
+            if (!this.canEdit) return;
+            this.tempDescription = this.lightboxDescription;
+            this.editingDescription = true;
+            this.$nextTick(() => {
+                this.$refs.descriptionInput?.focus();
+            });
+        },
+
+        cancelEditDescription() {
+            this.editingDescription = false;
+            this.tempDescription = '';
+        },
+
+        async saveDescription() {
+            const photo = this.photos[this.currentIndex];
+            if (!photo) return;
+
+            const result = await apiRequest('/api/photos/update', {
+                id: photo.id,
+                category: this.categorySlug,
+                description: this.tempDescription
+            });
+
+            if (result.success) {
+                this.lightboxDescription = this.tempDescription;
+                photo.description = this.tempDescription;
+                this.editingDescription = false;
+            } else {
+                alert(result.error || 'Fehler beim Speichern');
+            }
         },
 
         async deletePhoto(id, category) {

@@ -76,6 +76,7 @@ $routes = [
         '/reset' => 'reset-password_post',
         '/api/photos' => 'api/photos',
         '/api/photos/delete' => 'api/photos_delete',
+        '/api/photos/update' => 'api/photos_update',
         '/api/categories' => 'api/categories',
         '/api/categories/delete' => 'api/categories_delete',
         '/api/categories/rename' => 'api/categories_rename',
@@ -227,6 +228,26 @@ switch ($template) {
             jsonResponse(['success' => true]);
         } else {
             jsonResponse(['error' => 'Löschen fehlgeschlagen'], 500);
+        }
+        break;
+
+    case 'api/photos_update':
+        if (!$auth->isLoggedIn()) {
+            jsonResponse(['error' => 'Nicht eingeloggt'], 401);
+        }
+        if (!checkCsrf()) {
+            jsonResponse(['error' => 'Ungültiges Token'], 403);
+        }
+
+        $photoManager = new Photo($config);
+        $photoId = $_POST['id'] ?? '';
+        $categorySlug = $_POST['category'] ?? '';
+        $description = $_POST['description'] ?? '';
+
+        if ($photoManager->updateDescription($categorySlug, $photoId, $description)) {
+            jsonResponse(['success' => true, 'description' => $description]);
+        } else {
+            jsonResponse(['error' => 'Aktualisierung fehlgeschlagen'], 500);
         }
         break;
 
