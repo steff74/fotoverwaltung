@@ -11,8 +11,8 @@
 return [
     # Seiten-Einstellungen
     'site' => [
-        'title' => 'Adventmarkt Fotos',
-        'footer' => 'Adventmarkt Musterstadt',
+        'title' => 'Fotoverwaltung',
+        'footer' => 'Fotos Musterstadt',
     ],
 
     # Admin-Zugangsdaten (erster Admin-User)
@@ -38,7 +38,18 @@ return [
 
     # Session
     'session' => [
-        'name' => 'adventmarkt_session',
+        'name' => 'fotoverwaltung_session',
         'lifetime' => 86400, # 24 Stunden
+    ],
+
+    # E-Mail (SMTP)
+    'mail' => [
+        'from_email' => 'noreply@example.com',
+        'from_name' => 'Absendername',
+        'smtp_host' => 'smtp.example.com',
+        'smtp_port' => 587,
+        'smtp_user' => '',
+        'smtp_password' => '',
+        'smtp_secure' => 'tls', # 'tls' oder 'ssl'
     ],
 ];

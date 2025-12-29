@@ -5,6 +5,9 @@
 
 declare(strict_types=1);
 
+# Composer Autoloader (PHPMailer etc.)
+require_once __DIR__ . '/vendor/autoload.php';
+
 # Autoloader für src/-Klassen
 spl_autoload_register(function (string $class): void {
     $file = __DIR__ . '/src/' . $class . '.php';
@@ -28,6 +31,7 @@ if (!isset($_SESSION['csrf_token'])) {
 # Request-Pfad ermitteln
 $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
 $basePath = dirname($_SERVER['SCRIPT_NAME']);
+
 if ($basePath !== '/') {
     $requestUri = substr($requestUri, strlen($basePath));
 }
@@ -68,6 +72,8 @@ $routes = [
         '/reset' => 'reset-password',
         '/admin/users' => 'admin/users',
         '/admin/categories' => 'admin/categories',
+        '/admin/test-smtp' => 'admin/test-smtp',
+        '/admin/test-smtp-send' => 'admin/test-smtp-send',
     ],
     'POST' => [
         '/login' => 'login_post',
@@ -126,9 +132,9 @@ switch ($template) {
         # Immer Erfolg zeigen (Sicherheit: keine Info ob Email existiert)
         $success = 'Falls ein Konto mit dieser E-Mail existiert, wurde ein Reset-Link versendet.';
         if ($token) {
-            # TODO: Email versenden mit Link /reset?token=$token
-            # Für Entwicklung: Token in Session speichern
-            $_SESSION['dev_reset_token'] = $token;
+            $mailer = new Mailer($config);
+            $baseUrl = (isset($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
+            $mailer->sendPasswordReset($email, $token, $baseUrl);
         }
         $template = 'forgot-password';
         break;
@@ -394,6 +400,21 @@ switch ($template) {
         }
         # Alle eingeloggten User haben Zugriff
         break;
+
+    case 'admin/test-smtp':
+        if (!$auth->isLoggedIn() || !$auth->isAdmin()) {
+            jsonResponse(['success' => false, 'message' => 'Nicht autorisiert'], 403);
+        }
+        $mailer = new Mailer($config);
+        jsonResponse($mailer->testConnection());
+
+    case 'admin/test-smtp-send':
+        if (!$auth->isLoggedIn() || !$auth->isAdmin()) {
+            jsonResponse(['success' => false, 'message' => 'Nicht autorisiert'], 403);
+        }
+        $testEmail = $_GET['email'] ?? $auth->getEmail();
+        $mailer = new Mailer($config);
+        jsonResponse($mailer->sendTest($testEmail));
 }
 
 # Kategorien laden mit Foto-Anzahl

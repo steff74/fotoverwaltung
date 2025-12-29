@@ -1,0 +1,9 @@
+{
+    "name": "adventmarkt/fotogalerie",
+    "description": "Foto-Upload für Adventmarkt",
+    "type": "project",
+    "minimum-stability": "stable",
+    "require": {
+        "phpmailer/phpmailer": "^7.0"
+    }
+}

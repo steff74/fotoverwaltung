@@ -1,6 +1,9 @@
 # Claude Code
 /.claude/
 
+# Composer
+/vendor/
+
 # Konfiguration (enthält Passwörter)
 /config/config.php
 
